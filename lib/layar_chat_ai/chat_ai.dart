@@ -19,7 +19,7 @@ class _ChatBotState extends State<ChatAi> {
   List<ChatUser> typing = [];
 
   final ourUrl =
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyB7ZUimMsvodGCKs4ZZNcD9CAVKFi95A8A"; // Ganti YOUR_API_KEY dengan kunci API Anda
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key="; // Ganti YOUR_API_KEY dengan kunci API Anda
   final header = {'Content-Type': 'application/json'};
 
   getData(ChatMessage m) async {
