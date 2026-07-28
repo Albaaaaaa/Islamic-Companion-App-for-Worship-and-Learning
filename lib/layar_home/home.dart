@@ -5,12 +5,13 @@ import 'package:dakwah_y_up/layar_bacaan_sholat/bacaan_sholat.dart';
 import 'package:dakwah_y_up/layar_chat_ai/chat_ai.dart';
 import 'package:dakwah_y_up/layar_doa_sehari/doa.dart';
 import 'package:dakwah_y_up/asmaul_husna/asmaul_husna.dart';
+import 'package:dakwah_y_up/layar_jadwal_sholat/prayer_schedule_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class HomeScreen extends StatelessWidget {
       appBar: _buildAppBar(),
       bottomNavigationBar: _buildBottomNavigationBar(context),
       body: DefaultTabController(
-        length: 4,
+        length: 2,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25),
           child: NestedScrollView(
@@ -178,17 +179,20 @@ class HomeScreen extends StatelessWidget {
         _footerBarItem(icon: "assets/svgs/footer_lampu.svg", label: "Lampu"),
         _footerBarItem(icon: "assets/svgs/footer_orang_duduk.svg", label: "Icon Orang Duduk"),
         _footerBarItem(icon: "assets/svgs/footer_tangan_berdoa.svg", label: "Icon Tangan Berdoa"),
+        _footerBarItem(icon: "assets/svgs/buku_kecil.svg", label: "Jadwal Sholat"),
         _footerBarItem(icon: "assets/svgs/footer_simpan.svg", label: "Icon Simpan"),
       ],
       onTap: (index) {
         if (index == 1) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ChatAi()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatAi()));
         } else if (index == 2) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage()));
         } else if (index == 3) {
           Navigator.push(context, MaterialPageRoute(builder: (context) => DoaSehariPage()));
         } else if (index == 4) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AsmaulHusna()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const AsmaulHusna()));
+        } else if (index == 5) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const PrayerScheduleScreen()));
         }
       },
     );

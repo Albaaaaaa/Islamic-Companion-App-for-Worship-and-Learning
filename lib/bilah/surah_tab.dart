@@ -18,7 +18,7 @@ class SurahTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<List<Surah>>(
         future: _getSurahList(),
-        initialData: [],
+        initialData: const [],
         builder: ((context, snapshot) {
           if (!snapshot.hasData) {
             return Container();
@@ -27,7 +27,7 @@ class SurahTab extends StatelessWidget {
               itemBuilder: (context, index) => _surahItem(
                   context: context, surah: snapshot.data!.elementAt(index)),
               separatorBuilder: (context, index) =>
-                  Divider(color: const Color(0xFF7B80AD).withOpacity(.35)),
+                  Divider(color: const Color(0xFF7B80AD).withValues(alpha: .35)),
               itemCount: snapshot.data!.length);
         }));
   }

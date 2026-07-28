@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AsmaulHusna extends StatefulWidget {
-  const AsmaulHusna({Key? key});
+  const AsmaulHusna({super.key});
 
   @override
   State<AsmaulHusna> createState() => _AsmaulHusna();

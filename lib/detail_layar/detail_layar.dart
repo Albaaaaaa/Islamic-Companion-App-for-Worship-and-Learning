@@ -156,7 +156,7 @@ class DetailScreen extends StatelessWidget {
                       fontSize: 16),
                 ),
                 Divider(
-                  color: Colors.white.withOpacity(.35),
+                  color: Colors.white.withValues(alpha: .35),
                   thickness: 2,
                   height: 32,
                 ),

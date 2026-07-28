@@ -3,9 +3,10 @@ import 'package:dakwah_y_up/bahan.dart';
 import 'package:dakwah_y_up/layar_bacaan_sholat/models/bacaan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as rootBundle;
+import 'package:google_fonts/google_fonts.dart';
 
 class BacaanSholat extends StatefulWidget {
-  const BacaanSholat({Key? key}) : super(key: key);
+  const BacaanSholat({super.key});
 
   @override
   _BacaanSholatState createState() => _BacaanSholatState();
@@ -23,6 +24,23 @@ class _BacaanSholatState extends State<BacaanSholat> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: latarbelakang,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: latarbelakang,
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back_ios_rounded, color: stroke, size: 24),
+        ),
+        title: Text(
+          "Bacaan Sholat",
+          style: GoogleFonts.poppins(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: stroke,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -31,27 +49,20 @@ class _BacaanSholatState extends State<BacaanSholat> {
               children: [
                 Align(
                   alignment: Alignment.topLeft,
-                  child: IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: Icon(Icons.arrow_back, color: Colors.white),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
                   child: Container(
-                    margin: EdgeInsets.only(top: 80),
+                    margin: const EdgeInsets.only(top: 80),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                         color: grey),
                     height: 200,
                     width: MediaQuery.of(context).size.width,
                     child: Container(
-                        margin: EdgeInsets.only(top: 120, left: 20),
+                        margin: const EdgeInsets.only(top: 120, left: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               "Bacaan Sholat",
                               style: TextStyle(
                                   color: Colors.white,
@@ -69,7 +80,7 @@ class _BacaanSholatState extends State<BacaanSholat> {
                         )),
                   ),
                 ),
-                Align(
+                const Align(
                   alignment: Alignment.topRight,
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
@@ -81,7 +92,7 @@ class _BacaanSholatState extends State<BacaanSholat> {
                 ),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Expanded(
               child: Container(
                 child: FutureBuilder(
@@ -92,26 +103,26 @@ class _BacaanSholatState extends State<BacaanSholat> {
                     } else if (data.hasData) {
                       var items = data.data as List<ModelBacaan>;
                       return ListView.builder(
-                          itemCount: items == null ? 0 : items.length,
+                          itemCount: items.length,
                           itemBuilder: (context, index) {
                             return Card(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
                               elevation: 5,
-                              margin: EdgeInsets.all(15),
+                              margin: const EdgeInsets.all(15),
                               child: Theme(
                                 data: Theme.of(context)
                                     .copyWith(dividerColor: Colors.transparent),
                                 child: ExpansionTile(
                                   title: Text(
                                     items[index].name.toString(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   children: [
                                     Container(
-                                      padding: EdgeInsets.all(8),
+                                      padding: const EdgeInsets.all(8),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -120,7 +131,7 @@ class _BacaanSholatState extends State<BacaanSholat> {
                                         children: [
                                           Expanded(
                                               child: Container(
-                                            padding: EdgeInsets.only(bottom: 8),
+                                            padding: const EdgeInsets.only(bottom: 8),
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
@@ -128,33 +139,33 @@ class _BacaanSholatState extends State<BacaanSholat> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Padding(
-                                                  padding: EdgeInsets.only(
+                                                  padding: const EdgeInsets.only(
                                                       left: 8, right: 8),
                                                   child: Text(
                                                     items[index]
                                                         .arabic
                                                         .toString(),
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
                                                             FontWeight.bold),
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: EdgeInsets.only(
+                                                  padding: const EdgeInsets.only(
                                                       left: 8, right: 8),
                                                   child: Text(
                                                     items[index]
                                                         .latin
                                                         .toString(),
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontSize: 14,
                                                         fontStyle:
                                                             FontStyle.italic),
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: EdgeInsets.only(
+                                                  padding: const EdgeInsets.only(
                                                       left: 8,
                                                       right: 8,
                                                       top: 5),
@@ -162,7 +173,7 @@ class _BacaanSholatState extends State<BacaanSholat> {
                                                       items[index]
                                                           .terjemahan
                                                           .toString(),
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                         fontSize: 12,
                                                       )),
                                                 )
@@ -178,7 +189,7 @@ class _BacaanSholatState extends State<BacaanSholat> {
                             );
                           });
                     } else {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }

@@ -6,7 +6,7 @@ class CardView extends StatelessWidget {
   final int index;
   final List<EntityModel> data; 
   
-  const CardView({Key? key, required this.index, required this.data});
+  const CardView({super.key, required this.index, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +20,9 @@ class CardView extends StatelessWidget {
           begin: Alignment.bottomCenter,
           end: Alignment.topCenter
         ),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            offset: const Offset(0, 3),
+            offset: Offset(0, 3),
             blurRadius: 6.0
           )
         ]

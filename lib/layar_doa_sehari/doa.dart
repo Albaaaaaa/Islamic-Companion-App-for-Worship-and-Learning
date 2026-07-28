@@ -1,18 +1,29 @@
 import 'package:dakwah_y_up/bahan.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class DoaSehariPage extends StatelessWidget {
+  const DoaSehariPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Doa Sehari-hari",
-        style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: stroke),),
+        elevation: 0,
+        backgroundColor: latarbelakang,
+        title: Text(
+          "Doa Sehari-hari",
+          style: GoogleFonts.poppins(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: stroke,
+          ),
+        ),
+        centerTitle: true,
       ),
-      body: _PageList(
-      ),
-      backgroundColor: stroke,
+      body: _PageList(),
+      backgroundColor: latarbelakang,
     );
   }
 }
@@ -21,14 +32,22 @@ class DoaSehari {
   final String nama;
   final String isi;
   final String arti;
+  final IconData icon;
+  final LinearGradient gradient;
 
-  DoaSehari({required this.nama, required this.isi, required this.arti});
+  DoaSehari({
+    required this.nama,
+    required this.isi,
+    required this.arti,
+    required this.icon,
+    required this.gradient,
+  });
 }
 
 class DetailPage extends StatelessWidget {
   final DoaSehari doa;
 
-  DetailPage({required this.doa});
+  const DetailPage({super.key, required this.doa});
 
   @override
   Widget build(BuildContext context) {
@@ -36,30 +55,113 @@ class DetailPage extends StatelessWidget {
       backgroundColor: latarbelakang,
       appBar: AppBar(
         backgroundColor: latarbelakang,
-        title: Text(doa.nama,
-        style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),),
+        elevation: 0,
+        title: Text(
+          doa.nama,
+          style: GoogleFonts.poppins(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Doa:',
-              style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-            SizedBox(height: 8),
-            Text(
-              doa.isi,
-              style: TextStyle(fontSize: 30, color: Colors.white),
-            ),
-            SizedBox(height: 16),
-            SizedBox(height: 8),
-            Text(
-              doa.arti,
-              style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: stroke),
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: doa.gradient,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      doa.icon,
+                      size: 48,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      doa.nama,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Bacaan Arab:',
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: stroke,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: stroke.withOpacity(0.3)),
+                ),
+                child: Text(
+                  doa.isi,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    color: Colors.white,
+                    height: 1.8,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Arti:',
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: stroke,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: accentGreen.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: accentGreen.withOpacity(0.3)),
+                ),
+                child: Text(
+                  doa.arti,
+                  style: GoogleFonts.poppins(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                    height: 1.6,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -69,202 +171,111 @@ class DetailPage extends StatelessWidget {
 class _PageList extends StatelessWidget {
   final List<DoaSehari> doaList = [
     DoaSehari(
-    nama: "Doa sebelum makan",
-    isi: "اَللّٰهُمَّ بَارِكْ لَنَا فِيْمَا رَزَقْتَنَا وَقِنَا عَذَابَ النَّارِ",
-    arti:
-        "Artinya: Ya Allah, berkahilah kami dalam rezeki yang telah Engkau berikan kepada kami dan peliharalah kami dari siksa api neraka",
-  ),
-  DoaSehari(
-    nama: "Doa setelah makan",
-    isi: "اَلْحَمْدُ ِللهِ الَّذِىْ اَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِيْنَ",
-    arti:
-        "Artinya: Segala puji bagi Allah yang telah memberi makan kami dan minuman kami, serta menjadikan kami sebagai orang-orang islam",
-  ),
-  DoaSehari(
-    nama: "Doa ketika makan lupa membaca doa",
-    isi: "بِسْمِ اللهِ فِىِ أَوَّلِهِ وَآخِرِهِ",
-    arti: "Artinya: Dengan menyebut nama Allah pada awal dan akhirnya",
-  ),
-  DoaSehari(
-    nama: "Doa sebelum tidur",
-    isi: "بِسْمِكَ الللّٰهُمَّ اَحْيَا وَاَمُوْتُ",
-    arti: "Artinya: Dengan menyebut nama-Mu ya Allah, aku hidup dan aku mati",
-  ),
-  DoaSehari(
-    nama: "Doa bangun tidur",
-    isi: "اَلْحَمْدُ ِللهِ الَّذِىْ اَحْيَانَا بَعْدَمَآ اَمَاتَنَا وَاِلَيْهِ النُّشُوْرُ",
-    arti:
-        "Artinya: Segala puji bagi Allah yang telah menghidupkan kami sesudah kami mati (membangunkan dari tidur) dan hanya kepada-Nya kami dikembalikan",
-  ),
-  DoaSehari(
-    nama: "Doa ketika mendapat mimpi buruk",
-    isi: "اَللّٰهُمَّ إِنّىِ أَعُوْذُ بِكَ مِنْ عَمَلِ الشَّيْطَانِ وَسَيِّئاَتِ اْلأَحْلاَمِ",
-    arti: "Artinya: Ya Allah, aku berlindung kepada-Mu dari perbuatan setan dan mimpi-mimpi buruk",
-  ),
-  DoaSehari(
-    nama: "Doa ketika mendapat mimpi baik",
-    isi: "اَلْحَمْدُ ِللهِ الَّذِيْ قَطْلَ الْحَاجَتِ",
-    arti: "Artinya: Segala puji bagi Allah yang telah memenuhi hajatku",
-  ),
-  DoaSehari(
-  nama: "Doa masuk kamar mandi atau toilet",
-  isi: "اَللّٰهُمَّ كَمَا حَسَّنْتَ خَلْقِىْ فَحَسِّـنْ خُلُقِىْ",
-  arti: "Artinya: Ya Allah, sebagaimana Engkau telah menciptakan tubuhku dengan baik, maka sempurnakanlah akhlakku",
-),
-DoaSehari(
-  nama: "Doa keluar kamar mandi atau toilet",
-  isi: "غُفْرَانَكَ الْحَمْدُ ِللهِ الَّذِىْ اَذْهَبَ عَنّى اْلاَذَى وَعَافَانِىْ",
-  arti: "Artinya: Dengan menyebut namaMu ya Allah, aku berlindung kepadaMu dari kejahatan yang ada pada diriku",
-),
-DoaSehari(
-  nama: "Doa istinja",
-  isi: "غُفْرَانَكَ الْحَمْدُ ِللهِ الَّذِىْ اَذْهَبَ عَنّى اْلاَذَى وَعَافَانِىْ",
-  arti: "Artinya: Dengan menyebut namaMu ya Allah, aku berlindung kepadaMu dari kejahatan yang ada pada diriku",
-),
-DoaSehari(
-  nama: "Doa menjelang sholat subuh",
-  isi: "اَللّٰهُمَّ طَهِّرُ قَلْبِىْ مِنَ النِّفَاقِ وَحَصِّنْ فَرْخِىْ مِنَ الْفَوَاحِشِ",
-  arti: "Artinya: Ya Allah, sucikanlah hatiku dari sifat kepura-puraan (munafiq) serta peliharalah kemaluanku dari perbuatan keji",
-),
-DoaSehari(
-  nama: "Doa menyambut pagi hari",
-  isi: "اَللّٰهُمَّ اِنّىْ اَعُوْذُبِكَ مِنْ ضِيْقِ الدُّنْيَا وَضِيْقِ يَوْمِ الْقِيَامَةِ",
-  arti: "Artinya: Ya Allah, sesungguhnya aku berlindung kepada-Mu dari kesempitan dunia dan kesempitan hari kiamat",
-),
-DoaSehari(
-  nama: "Doa menyambut sore hari",
-  isi: "اَللّٰهُمَّ بِكَ اَمْسَيْنَا وَبِكَ اَصْبَحْنَا وَبِكَ نَحْيَا وَبِكَ نَمُوْتُ وَاِلَيْكَ الْمَصِيْرُ",
-  arti: "Artinya: Ya Allah, karena Engkau kami mengalami waktu petang dan waktu pagi, karena Engkau kami hidup dan mati dan kepada-Mu juga kami akan kembali",
-),
-DoaSehari(
-  nama: "Doa ketika becermin",
-  isi: "اَلْحَمْدُ ِللهِ كَمَا حَسَّنْتَ خَلْقِىْ  فَحَسِّـنْ خُلُقِىْ",
-  arti: "Artinya: Segala puji bagi Allah, baguskanlah budi pekertiku sebagaimana Engkau telah membaguskan rupa wajahku",
-),
-DoaSehari(
-  nama: "Doa masuk rumah",
-  isi: "بِسْمِ اللهِ الَّذِىْ لاَ اِلَهَ اِلاَّ هُوَ",
-  arti: "Artinya: Dengan menyebut nama Allah yang tiada Tuhan selain-Nya",
-),
-DoaSehari(
-  nama: "Doa keluar rumah",
-  isi: "بِسْمِ اللهِ تَوَكَّلْتُ عَلَى اللهِ لاَحَوْلَ وَلاَقُوَّةَ اِلاَّ بِالله",
-  arti: "Artinya: Dengan nama Allah aku bertawakal kepada Allah, tiada daya kekuatan melainkan dengan pertologan Allah",
-),
-DoaSehari(
-  nama: "Doa memakai pakaian baru",
-  isi: "بِسْمِ اللهِ الَّذِى لاَ اِلَهَ اِلاَّ هُوَ",
-  arti: "Artinya: Dengan menyebut nama Allah yang tiada Tuhan selain-Nya",
-),
-DoaSehari(
-  nama: "Doa melepas pakaian",
-  isi: "اَلْحَمْدُ لِلّٰهِ الَّذِى كَسَانِىْ هَذَا وَرَزَقَنِيْهِ مِنْ غَيْرِ حَوْلٍ مِنِّىْ وَلاَقُوَّةٍ",
-  arti: "Artinya: Segala puji bagi Allah yang memberi aku pakaian ini dan memberi rezeki dengan tiada daya dan kekuatan dariku",
-),
-DoaSehari(
-  nama: "Doa memohon ilmu yang bermanfaat",
-  isi: "اَللّٰهُمَّ اجْعَلْ فِىْ قَلْبِى نُوْرًا وَفِى لِسَانِىْ نُوْرًا وَفِىْ بَصَرِىْ نُوْرًا وَفِىْ سَمْعِىْ نُوْرًا وَعَنْ يَسَارِىْ نُوْرًا وَعَنْ يَمِيْنِىْ نُوْرًا وَفَوْقِىْ نُوْرًا وَتَحْتِىْ نُوْرًا وَاَمَامِىْ نُوْرًا وَخَلْفِىْ نُوْرًا وَاجْعَلْ لِّىْ نُوْرً",
-  arti: "Artinya: Ya Allah, jadikanlah di hatiku cahaya, pada lisanku cahaya, dipandanganku cahaya, dalam pendengaranku cahaya, dari kananku cahaya, dari kiriku cahaya, dari atas ku cahaya, dari bawahku cahaya, dari depanku cahaya, belakangku cahaya, dan jadikanlah untukku cahaya",
-),
-DoaSehari(
-  nama: "Doa sebelum belajar",
-  isi: "اَللّٰهُمَّ افْتَحْ عَلَىَّ حِكْمَتَكَ وَانْشُرْ عَلَىَّ رَحْمَتَكَ وَذَكِّرْنِىْ مَانَسِيْتُ يَاذَاالْجَلاَلِ وَاْلاِكْرَامِاَللّٰهُمَّ ارْحَمْنِىْ بِالْقُرْآنِ. وَاجْعَلْهُ لِىْ اِمَامًا وَنُوْرًا وَّهُدًى وَّرَحْمَةً. اَللّٰهُمَّ ذَكِّرْنِىْ مِنْهُ مَانَسِيْتُ وَعَلِّمْنِىْ مِنْهُ مَاجَهِلْتُ. وَارْزُقْنِىْ تِلاَ وَتَهُ آنَآءَ اللَّيْلِ وَاَطْرَافَ النَّهَارٍ.وَاجْعَلْهُ لِىْ حُجَّةً يَارَبَّ الْعَالَمِيْنَ",
-  arti: "Artinya: Ya Allah, bukakanlah atas diriku hikmat-Mu dan hamparkanlah rahmat-Mu kepadaku, dan ingatkanlah aku terhadap apa yang telah aku lupakan, wahai Tuhan yang memiliki keagungan dan kemuliaan. Ya Allah, berilah rahmat kepada aku dengan Al-Quran, jadikanlah Al-Quran itu bagiku pemimpin, cahaya, petunjuk, dan rahmat. Ya Allah, ingatkanlah aku akan Al-Quran yang telah aku lupakan, ajarkanlah aku dari Al-Quran apa yang belum aku ketahui, dan karuniakanlah aku membaca dan memahami Al-Quran pada waktu malam dan siang. Dan jadikanlah Al-Quran itu sebagai hujjah bagiku, wahai Tuhan seru sekalian alam",
-),
-DoaSehari(
-  nama: "Doa setelah belajar",
-  isi: "اَللّٰهُمَّ يَارَبَّ الْعَالَمِيْنَ آتِنِىْ فِى الدُّنْيَا حَسَنَةً وَّفِى الآخِرَةِ حَسَنَةً وَّقِنِىْ عَذَابَ النَّارِ",
-  arti: "Artinya: Ya Allah, wahai Tuhan seru sekalian alam, berilah aku kebaikan di dunia dan kebaikan di akhirat dan peliharalah aku dari siksa api neraka",
-),
-DoaSehari(
-  nama: "Doa bepergian",
-  isi: "اَللّٰهُمَّ سُبْحَانَ الَّذِىْ سَخَّرَلَنَا هَذَا وَمَاكُنَّالَهُ مُقْرِنِيْنَ وَاِنَّآ اِلَى رَبِّنَا لَمُنْقَلِبُوْنَ",
-  arti: "Artinya: Maha suci Allah yang telah menundukkan untuk kami (kendaraan) ini. padahal sebelumnya kami tidak mampu untuk menguasainya, dan hanya kepada-Mu lah kami akan kembali",
-),
-DoaSehari(
-  nama: "Doa naik kendaraan",
-  isi: "بِسْمِ اللهِ مَجْرَهَا وَمُرْسَهَآاِنَّ رَبِّىْ لَغَفُوْرٌرَّحِيْمٌ",
-  arti: "Artinya: Dengan menyebut nama Allah yang menjalankan kendaraan ini berlayar dan berlabuh, sesungguhnya Tuhanku benar-benar Maha Pengampun lagi Maha Penyayang",
-),
-DoaSehari(
-  nama: "Doa naik kapal",
-  isi: "اَلْحَمْدُ ِللهِ الَّذِى سَلَمَنِى وَالَّذِى اَوَنِى وَالَّذِى جَمَعَ الشَّمْلَ بِ",
-  arti: "Artinya: Segala puji bagi Allah, yang telah menyelamatkan aku dan yang telah melindungiku dan yang mengumpulkanku dengan keluargaku",
-),
-DoaSehari(
-  nama: "Doa ketika sampai tempat tujuan",
-  isi: "اَللّٰهُمَّ اجْعَلْنَا مِنَ الْمُسْتَوْدِعِيْنَ وَاجْعَلْنَا مِنَ الْمُسْتَوْدَعِيْنَ",
-  arti: "Artinya: Ya Allah, jadikanlah kami dari mereka yang dipercayai dan jadikanlah kami dari mereka yang menepati kepercayaan",
-),
-DoaSehari(
-  nama: "Doa ketika menuju masjid",
-  isi: "اَللّٰهُمَّ وَفِّقْنِىْ لِزِيَارَةِ قَبْرِالنَّبِيِّ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ",
-  arti: "Artinya: Ya Allah, berilah aku keberuntungan untuk mengunjungi kuburan Nabi Muhammad SAW",
-),
-DoaSehari(
-  nama: "Doa masuk masjid",
-  isi: "اَللّٰهُمَّ افْتَحْ لِىْ اَبْوَابَ رَحْمَتِكَ",
-  arti: "Artinya: Ya Allah, bukakanlah untukku pintu-pintu rahmat-Mu",
-),
-DoaSehari(
-  nama: "Doa keluar masjid",
-  isi: "اَللّٰهُمَّ اِنِّى اَسْأَلُكَ مِنْ فَضْلِكَ",
-  arti: "Artinya: Ya Allah, sesungguhnya aku memohon keutamaan dari-Mu",
-),
-DoaSehari(
-  nama: "Doa akan membaca Al Quran",
-  isi: "اَللّٰهُمَّ افْتَحْ عَلَيَّ حِكْمَتَكَ وَانْشُرْ عَلَيَّ رَحْمَتَكَ وَذَكِّرْنِىْ مَانَسِيْتُ يَاذَاالْجَلاَلِ وَالإِكْرَامِ اَللّٰهُمَّ ارْحَمْنِيْ بِالْقُرْآنِ وَاجْعَلْهُ لِىْ اِمَامًا وَنُوْرًا وَّهُدًى وَّرَحْمَةً، اَللّٰهُمَّ ذَكِّرْنِيْ مِنْهُ مَا نَسِيْتُ وَعَلِّمْنِيْ مِنْهُ مَا جَهِلْتُ",
-  arti: "Artinya: Ya Allah, bukakanlah atas diriku hikmat-Mu dan hamparkanlah rahmat-Mu kepadaku, dan ingatkanlah aku terhadap apa yang telah aku lupakan, wahai Tuhan yang memiliki keagungan dan kemuliaan. Ya Allah, berilah rahmat kepada aku dengan Al-Quran, jadikanlah Al-Quran itu bagiku pemimpin, cahaya, petunjuk, dan rahmat. Ya Allah, ingatkanlah aku akan Al-Quran yang telah aku lupakan, ajarkanlah aku dari Al-Quran apa yang belum aku ketahui",
-),
-DoaSehari(
-  nama: "Doa setelah membaca Al Quran",
-  isi: "اللَّهُمَّ اجْعَلْهُ لِي عُهْداً وَّذِكْراً وَهُدًى وَرَحْمَةً، اللَّهُمَّ ذَكِّرْنِي مِنْهُ مَا نَسِيتُ وَعَلِّمْنِي مِنْهُ مَا جَهِلْتُ",
-  arti: "Artinya: Ya Allah, jadikanlah Al-Quran ini sebagai penjamin bagiku, sebagai pengingat, petunjuk, dan rahmat. Ya Allah, ingatkanlah aku akan apa yang aku lupakan darinya, dan ajarkanlah aku dari Al-Quran apa yang belum aku ketahui",
-),
-DoaSehari(
-  nama: "Doa ketika hujan",
-  isi: "اللَّهُمَّ صَيِّبًا نَافِعًا",
-  arti: "Artinya: Ya Allah, turunkanlah hujan yang bermanfaat bagi kami",
-),
-DoaSehari(
-  nama: "Doa ketika melihat awan gelap",
-  isi: "اَللَّهُمَّ زِدْ وَبَارِكْ، اللَّهُمَّ اغِثْنَا",
-  arti: "Artinya: Ya Allah, tambahkanlah dan berkahilah, Ya Allah, turunkanlah hujan pada kami",
-),
-DoaSehari(
-  nama: "Doa ketika angin kencang",
-  isi: "اللَّهُمَّ اَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ تَبَارَكْتَ يَاذَا الْجَلَالِ وَاْلإِكْرَامِ",
-  arti: "Artinya: Ya Allah, Engkaulah yang memberi keselamatan, dan dari-Mu keselamatan, Maha Suci Engkau, wahai Tuhan yang memiliki keagungan dan kemuliaan",
-),
-DoaSehari(
-  nama: "Doa ketika mendengar petir",
-  isi: "اَعُوْذُ بِعَزَّةِ اللهِ وَقُدْرَتِهِ مِنْ شَرِّ مَا اَرَى وَاَسْمَعُ",
-  arti: "Artinya: Aku berlindung dengan keperkasaan Allah dari keburukan apa yang aku lihat dan aku dengar",
-),
-DoaSehari(
-  nama: "Doa ketika melihat kilat",
-  isi: "سُبْحَانَ الَّذِىْ يُسَبِّحُ الرَّعْدُ بِحَمْدِهِ وَالْمَلَائِكَةُ مِنْ خِيْفَتِهِ",
-  arti: "Artinya: Maha suci Allah yang kilat bertasbih dengan pujian-Nya, dan para malaikat karena takut kepada-Nya",
-),
-DoaSehari(
-  nama: "Doa masuk rumah",
-  isi: "بِسْمِ اللهِ وَلَجْنَا وَبِسْمِ اللهِ خَرَجْنَا وَعَلَى اللهِ رَبِّنَا تَوَكَّلْنَا",
-  arti: "Artinya: Dengan menyebut nama Allah kami masuk, dan dengan menyebut nama Allah kami keluar, dan kepada Allah Tuhan kami, kami bertawakal",
-),
-DoaSehari(
-  nama: "Doa keluar rumah",
-  isi: "بِسْمِ اللهِ تَوَكَّلْتُ عَلَى اللهِ وَلَا حَوْلَ وَلَا قُوَّةَ اِلَّا بِالله",
-  arti: "Artinya: Dengan menyebut nama Allah, aku bertawakal kepada Allah, tidak ada daya dan kekuatan kecuali dengan pertolongan Allah",
-),
+      nama: "Doa Sebelum Makan",
+      isi: "اَللّٰهُمَّ بَارِكْ لَنَا فِيْمَا رَزَقْتَنَا وَقِنَا عَذَابَ النَّارِ",
+      arti:
+          "Artinya: Ya Allah, berkahilah kami dalam rezeki yang telah Engkau berikan kepada kami dan peliharalah kami dari siksa api neraka",
+      icon: Icons.lunch_dining_rounded,
+      gradient: orangeGradient,
+    ),
+    DoaSehari(
+      nama: "Doa Setelah Makan",
+      isi: "اَلْحَمْدُ ِللهِ الَّذِىْ اَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِيْنَ",
+      arti:
+          "Artinya: Segala puji bagi Allah yang telah memberi makan kami dan minuman kami, serta menjadikan kami sebagai orang-orang islam",
+      icon: Icons.done_all_rounded,
+      gradient: greenGradient,
+    ),
+    DoaSehari(
+      nama: "Doa Ketika Lupa Berdoa",
+      isi: "بِسْمِ اللهِ فِىِ أَوَّلِهِ وَآخِرِهِ",
+      arti: "Artinya: Dengan menyebut nama Allah pada awal dan akhirnya",
+      icon: Icons.lightbulb_rounded,
+      gradient: blueGradient,
+    ),
+    DoaSehari(
+      nama: "Doa Sebelum Tidur",
+      isi: "بِسْمِكَ الللّٰهُمَّ اَحْيَا وَاَمُوْتُ",
+      arti: "Artinya: Dengan menyebut nama-Mu ya Allah, aku hidup dan aku mati",
+      icon: Icons.nights_stay_rounded,
+      gradient: purpleGradient,
+    ),
+    DoaSehari(
+      nama: "Doa Bangun Tidur",
+      isi: "اَلْحَمْدُ ِللهِ الَّذِىْ اَحْيَانَا بَعْدَمَآ اَمَاتَنَا وَاِلَيْهِ النُّشُوْرُ",
+      arti:
+          "Artinya: Segala puji bagi Allah yang telah menghidupkan kami sesudah kami mati (membangunkan dari tidur) dan hanya kepada-Nya kami dikembalikan",
+      icon: Icons.wb_sunny_rounded,
+      gradient: tealGradient,
+    ),
+    DoaSehari(
+      nama: "Doa Mimpi Buruk",
+      isi: "اَللّٰهُمَّ إِنّىِ أَعُوْذُ بِكَ مِنْ عَمَلِ الشَّيْطَانِ وَسَيِّئاَتِ اْلأَحْلاَمِ",
+      arti: "Artinya: Ya Allah, aku berlindung kepada-Mu dari perbuatan setan dan mimpi-mimpi buruk",
+      icon: Icons.sentiment_dissatisfied_rounded,
+      gradient: const LinearGradient(
+        colors: [Color(0xFFE74C3C), Color(0xFFC0392B)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+    ),
+    DoaSehari(
+      nama: "Doa Mimpi Baik",
+      isi: "اَلْحَمْدُ ِللهِ الَّذِيْ قَطْلَ الْحَاجَتِ",
+      arti: "Artinya: Segala puji bagi Allah yang telah memenuhi hajatku",
+      icon: Icons.sentiment_satisfied_rounded,
+      gradient: greenGradient,
+    ),
+    DoaSehari(
+      nama: "Doa Masuk Kamar Mandi",
+      isi: "اَللّٰهُمَّ كَمَا حَسَّنْتَ خَلْقِىْ فَحَسِّـنْ خُلُقِىْ",
+      arti:
+          "Artinya: Ya Allah, sebagaimana Engkau telah menciptakan tubuhku dengan baik, maka sempurnakanlah akhlakku",
+      icon: Icons.water_drop_rounded,
+      gradient: blueGradient,
+    ),
+    DoaSehari(
+      nama: "Doa Keluar Kamar Mandi",
+      isi: "غُفْرَانَكَ الْحَمْدُ ِللهِ الَّذِىْ اَذْهَبَ عَنّى اْلاَذَى وَعَافَانِىْ",
+      arti:
+          "Artinya: Dengan menyebut namaMu ya Allah, aku berlindung kepadaMu dari kejahatan yang ada pada diriku",
+      icon: Icons.check_circle_rounded,
+      gradient: tealGradient,
+    ),
+    DoaSehari(
+      nama: "Doa Sebelum Belajar",
+      isi:
+          "اَللّٰهُمَّ افْتَحْ عَلَىَّ حِكْمَتَكَ وَانْشُرْ عَلَىَّ رَحْمَتَكَ وَذَكِّرْنِىْ مَانَسِيْتُ",
+      arti:
+          "Artinya: Ya Allah, bukakanlah atas diriku hikmat-Mu dan hamparkanlah rahmat-Mu kepadaku",
+      icon: Icons.school_rounded,
+      gradient: purpleGradient,
+    ),
+    DoaSehari(
+      nama: "Doa Masuk Rumah",
+      isi: "بِسْمِ اللهِ الَّذِىْ لاَ اِلَهَ اِلاَّ هُوَ",
+      arti: "Artinya: Dengan menyebut nama Allah yang tiada Tuhan selain-Nya",
+      icon: Icons.home_rounded,
+      gradient: greenGradient,
+    ),
+    DoaSehari(
+      nama: "Doa Keluar Rumah",
+      isi: "بِسْمِ اللهِ تَوَكَّلْتُ عَلَى اللهِ لاَحَوْلَ وَلاَقُوَّةَ اِلاَّ بِالله",
+      arti:
+          "Artinya: Dengan nama Allah aku bertawakal kepada Allah, tiada daya kekuatan melainkan dengan pertolongan Allah",
+      icon: Icons.exit_to_app_rounded,
+      gradient: orangeGradient,
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
       itemCount: doaList.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: InkWell(
             onTap: () {
               Navigator.push(
@@ -274,18 +285,60 @@ DoaSehari(
                 ),
               );
             },
+            borderRadius: BorderRadius.circular(16),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(color: Color.fromARGB(255, 3, 12, 70)),
+                gradient: doaList[index].gradient,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.15),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
               ),
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                doaList[index].nama.toUpperCase(),
-                style: GoogleFonts.poppins(fontSize: 18.0, color: Colors.black),
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      doaList[index].icon,
+                      color: Colors.white,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      doaList[index].nama.toUpperCase(),
+                      style: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: Colors.white.withOpacity(0.7),
+                    size: 18,
+                  ),
+                ],
               ),
             ),
-          ),
+          ).animate().slideX(
+                duration: const Duration(milliseconds: 400),
+                begin: -0.2,
+                end: 0,
+              ),
         );
       },
     );
@@ -293,7 +346,9 @@ DoaSehari(
 }
 
 void main() {
-  runApp(MaterialApp(
-    home: DoaSehariPage(),
-  ));
+  runApp(
+    const MaterialApp(
+      home: DoaSehariPage(),
+    ),
+  );
 }

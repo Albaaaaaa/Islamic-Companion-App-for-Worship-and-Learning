@@ -4,9 +4,10 @@ import 'dart:convert';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:dakwah_y_up/config/api_config.dart';
 
 class ChatAi extends StatefulWidget {
-  const ChatAi({Key? key}) : super(key: key);
+  const ChatAi({super.key});
 
   @override
   State<ChatAi> createState() => _ChatBotState();
@@ -18,8 +19,14 @@ class _ChatBotState extends State<ChatAi> {
   List<ChatMessage> allMassages = [];
   List<ChatUser> typing = [];
 
-  final ourUrl =
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key="; // Ganti YOUR_API_KEY dengan kunci API Anda
+  late final String ourUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    ourUrl = ApiConfig.geminiUrl;
+  }
+
   final header = {'Content-Type': 'application/json'};
 
   getData(ChatMessage m) async {
@@ -29,22 +36,54 @@ class _ChatBotState extends State<ChatAi> {
 
     var data = {"contents": [{"parts": [{"text": m.text}]}]};
 
-    await http.post(Uri.parse(ourUrl), headers: header, body: jsonEncode(data)).then(
-      (value) {
-        if (value.statusCode == 200) {
-          var result = jsonDecode(value.body);
-          print(result["candidates"][0]["content"]["parts"][0]["text"]);
-          ChatMessage m1 = ChatMessage(
-            user: bot,
-            createdAt: DateTime.now(),
-            text: result["candidates"][0]["content"]["parts"][0]["text"],
-          );
-          allMassages.insert(0, m1);
-        } else {
-          print("Error occurred");
-        }
-      },
-    ).catchError((e) {});
+    try {
+      print("DEBUG: Sending request to Gemini API");
+      print("DEBUG: URL: $ourUrl");
+      
+      final response = await http.post(
+        Uri.parse(ourUrl),
+        headers: header,
+        body: jsonEncode(data),
+      );
+
+      print("DEBUG: Response status code: ${response.statusCode}");
+      print("DEBUG: Response body: ${response.body}");
+
+      if (response.statusCode == 200) {
+        var result = jsonDecode(response.body);
+        final responseText = result["candidates"][0]["content"]["parts"][0]["text"];
+        print("DEBUG: API Response received successfully");
+        print(responseText);
+        
+        ChatMessage m1 = ChatMessage(
+          user: bot,
+          createdAt: DateTime.now(),
+          text: responseText,
+        );
+        allMassages.insert(0, m1);
+      } else {
+        print("ERROR: API returned status code ${response.statusCode}");
+        print("ERROR: Response body: ${response.body}");
+        
+        ChatMessage errorMsg = ChatMessage(
+          user: bot,
+          createdAt: DateTime.now(),
+          text: "Error: API returned status ${response.statusCode}. ${response.body}",
+        );
+        allMassages.insert(0, errorMsg);
+      }
+    } catch (e, stackTrace) {
+      print("ERROR: Exception occurred: $e");
+      print("ERROR: Stack trace: $stackTrace");
+      
+      ChatMessage errorMsg = ChatMessage(
+        user: bot,
+        createdAt: DateTime.now(),
+        text: "Error: $e",
+      );
+      allMassages.insert(0, errorMsg);
+    }
+    
     typing.remove(bot);
     setState(() {});
   }
@@ -57,7 +96,7 @@ class _ChatBotState extends State<ChatAi> {
         title: Text("Dakwah'y up Chat AI", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),), // Ubah warna teks menjadi hitam
         // Tambahkan tombol kembali di sini
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          icon: const Icon(Icons.arrow_back, color: Colors.white,),
           color: latarbelakang, // Ubah warna tombol menjadi hitam
           onPressed: () {
             Navigator.of(context).pop();
@@ -66,7 +105,7 @@ class _ChatBotState extends State<ChatAi> {
         backgroundColor: latarbelakang, // Ubah warna latar belakang AppBar sesuai kebutuhan
       ),
       body: DashChat(
-        messageOptions: MessageOptions(
+        messageOptions: const MessageOptions(
           showTime: true,
           textColor: Colors.white,
           containerColor: Color.fromARGB(255, 63, 60, 60),
