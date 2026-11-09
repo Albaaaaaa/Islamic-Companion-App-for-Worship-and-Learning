@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dakwah_y_up/bahan.dart';
 import 'package:dakwah_y_up/models/surah.dart';
@@ -18,23 +17,31 @@ class SurahTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<List<Surah>>(
         future: _getSurahList(),
-        initialData: const [],
         builder: ((context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+                child: CircularProgressIndicator(color: stroke));
+          }
+          if (snapshot.hasError) {
+            return Center(
+                child: Text('Daftar surah belum dapat dimuat.',
+                    style: TextStyle(color: grey)));
+          }
           if (!snapshot.hasData) {
-            return Container();
+            return const SizedBox.shrink();
           }
           return ListView.separated(
               itemBuilder: (context, index) => _surahItem(
                   context: context, surah: snapshot.data!.elementAt(index)),
               separatorBuilder: (context, index) =>
-                  Divider(color: const Color(0xFF7B80AD).withValues(alpha: .35)),
+                  const Divider(height: 1, color: Color(0xFFD8CFC3)),
               itemCount: snapshot.data!.length);
         }));
   }
 
   Widget _surahItem({required Surah surah, required BuildContext context}) =>
-      GestureDetector(
-        behavior: HitTestBehavior.opaque,
+      InkWell(
+        borderRadius: BorderRadius.circular(12),
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => DetailScreen(
@@ -42,23 +49,24 @@ class SurahTab extends StatelessWidget {
                   )));
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
+          padding: const EdgeInsets.symmetric(vertical: 13),
           child: Row(
             children: [
-              Stack(
-                children: [
-                  SvgPicture.asset('assets/svgs/nomor-surah.svg'),
-                  SizedBox(
-                    height: 36,
-                    width: 36,
-                    child: Center(
-                        child: Text(
-                      "${surah.nomor}",
-                      style: GoogleFonts.poppins(
-                          color: Colors.white, fontWeight: FontWeight.w500),
-                    )),
-                  )
-                ],
+              Container(
+                height: 36,
+                width: 36,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF0D8CD),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: stroke.withValues(alpha: .28)),
+                ),
+                child: Center(
+                  child: Text(
+                    '${surah.nomor}',
+                    style: GoogleFonts.poppins(
+                        color: stroke, fontWeight: FontWeight.w600),
+                  ),
+                ),
               ),
               const SizedBox(
                 width: 16,
@@ -70,9 +78,7 @@ class SurahTab extends StatelessWidget {
                   Text(
                     surah.namaLatin,
                     style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16),
+                        color: text, fontWeight: FontWeight.w500, fontSize: 16),
                   ),
                   const SizedBox(
                     height: 4,
@@ -82,7 +88,7 @@ class SurahTab extends StatelessWidget {
                       Text(
                         surah.tempatTurun.name,
                         style: GoogleFonts.poppins(
-                            color: text,
+                            color: grey,
                             fontWeight: FontWeight.w500,
                             fontSize: 12),
                       ),
@@ -94,7 +100,7 @@ class SurahTab extends StatelessWidget {
                         height: 4,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(2),
-                            color: text),
+                            color: grey),
                       ),
                       const SizedBox(
                         width: 5,
@@ -102,7 +108,7 @@ class SurahTab extends StatelessWidget {
                       Text(
                         "${surah.jumlahAyat} Ayat",
                         style: GoogleFonts.poppins(
-                            color: text,
+                            color: grey,
                             fontWeight: FontWeight.w500,
                             fontSize: 12),
                       ),

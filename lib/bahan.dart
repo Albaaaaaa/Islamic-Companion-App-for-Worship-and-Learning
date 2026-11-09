@@ -1,51 +1,41 @@
-
 import 'package:flutter/material.dart';
 
-// Primary Colors
-Color latarbelakang = const Color(0xFF040C23);
-Color text = const Color(0xFFFFFFFF);
-Color grey = const Color(0xFF84A59F);
-Color stroke = const Color(0xFF1C6758);
-Color footer = const Color(0xFF121931);
+/// Shared design tokens: ivory surfaces, charcoal type, and one terracotta accent.
+const Color latarbelakang = Color(0xFFF4EFE6);
+const Color surface = Color(0xFFFFFCF6);
+const Color text = Color(0xFF26231F);
+const Color grey = Color(0xFF716A60);
+const Color stroke = Color(0xFF9C4F35);
+const Color footer = Color(0xFFFFFCF6);
+const Color accentGreen = Color(0xFF9C4F35);
+const Color accentTeal = Color(0xFFB87350);
+const Color accentBlue = Color(0xFF5C6B67);
+const Color accentOrange = Color(0xFFC48A3A);
+const Color accentPurple = Color(0xFF766D64);
+const Color accentRed = Color(0xFFA94436);
 
-// Accent Colors for UI
-Color accentGreen = const Color(0xFF2ECC71);
-Color accentTeal = const Color(0xFF1ABC9C);
-Color accentBlue = const Color(0xFF3498DB);
-Color accentOrange = const Color(0xFFE67E22);
-Color accentPurple = const Color(0xFF9B59B6);
-Color accentRed = const Color(0xFFE74C3C);
-
-// Gradients
-LinearGradient greenGradient = LinearGradient(
-  colors: [const Color(0xFF1C6758), const Color(0xFF2ECC71)],
+const LinearGradient greenGradient = LinearGradient(
+  colors: [Color(0xFF3A2B27), Color(0xFF9C4F35)],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
 );
-
-LinearGradient tealGradient = LinearGradient(
-  colors: [const Color(0xFF1ABC9C), const Color(0xFF16A085)],
+const LinearGradient tealGradient = LinearGradient(
+  colors: [Color(0xFF9C4F35), Color(0xFFB87350)],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
 );
-
-LinearGradient purpleGradient = LinearGradient(
-  colors: [const Color(0xFF9B59B6), const Color(0xFF8E44AD)],
+const LinearGradient purpleGradient = LinearGradient(
+  colors: [Color(0xFF766D64), Color(0xFF3A3530)],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
 );
-
-LinearGradient blueGradient = LinearGradient(
-  colors: [const Color(0xFF3498DB), const Color(0xFF2980B9)],
+const LinearGradient blueGradient = LinearGradient(
+  colors: [Color(0xFF5C6B67), Color(0xFF394B47)],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
 );
-
-LinearGradient orangeGradient = LinearGradient(
-  colors: [const Color(0xFFE67E22), const Color(0xFFD35400)],
+const LinearGradient orangeGradient = LinearGradient(
+  colors: [Color(0xFFC48A3A), Color(0xFF805525)],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
 );
-
-
-

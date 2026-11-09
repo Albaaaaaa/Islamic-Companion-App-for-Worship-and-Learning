@@ -11,23 +11,30 @@ class About extends StatelessWidget {
       backgroundColor: latarbelakang,
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 208.0), // Adjust bottom padding as needed
+          padding: const EdgeInsets.fromLTRB(
+              16.0, 16.0, 16.0, 208.0), // Adjust bottom padding as needed
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Text(
-                  'Universitas Muhammadiyah Kalimantan Timur',
+              Text('Tentang aplikasi',
+                  style: GoogleFonts.playfairDisplay(
+                      fontSize: 28, fontWeight: FontWeight.w600, color: text)),
+              const SizedBox(height: 6),
+              Text(
+                  'Teman kecil untuk membaca, belajar, dan menjaga ritme ibadah.',
                   style: GoogleFonts.poppins(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ),
+                      fontSize: 13, height: 1.5, color: grey)),
+              const SizedBox(height: 20),
+              Text('Dikembangkan di Universitas Muhammadiyah Kalimantan Timur',
+                  style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      letterSpacing: .4,
+                      color: stroke,
+                      fontWeight: FontWeight.w600)),
               const SizedBox(height: 10.0),
               // Informasi untuk Mahasiswa 1
               buildMahasiswaInfo(
-                'Mahasiswa 1',
+                'Tim pengembang 01',
                 'assets/images/mahasiswa1.png', // Ubah path foto sesuai dengan nama yang Anda berikan
                 'Nama : Naufal Rajwa Dwiyana Athallah',
                 'NIM  : 2211102441136',
@@ -35,7 +42,7 @@ class About extends StatelessWidget {
               const SizedBox(height: 10.0),
               // Informasi untuk Mahasiswa 2
               buildMahasiswaInfo(
-                'Mahasiswa 2',
+                'Tim pengembang 02',
                 'assets/images/mahasiswa2.png', // Ubah path foto sesuai dengan nama yang Anda berikan
                 'Nama : Edwin Abdul Salam',
                 'NIM  : 2211102441138',
@@ -43,7 +50,7 @@ class About extends StatelessWidget {
               const SizedBox(height: 10.0),
               // Informasi untuk Mahasiswa 3
               buildMahasiswaInfo(
-                'Mahasiswa 3',
+                'Tim pengembang 03',
                 'assets/images/mahasiswa3.png', // Ubah path foto sesuai dengan nama yang Anda berikan
                 'Nama : Muhammad Irsyadudin Islami',
                 'NIM  : 2211102441128',
@@ -51,22 +58,18 @@ class About extends StatelessWidget {
               const SizedBox(height: 10.0),
               // Informasi untuk Mahasiswa 4
               buildMahasiswaInfo(
-                'Mahasiswa 4',
+                'Tim pengembang 04',
                 'assets/images/mahasiswa4.png', // Ubah path foto sesuai dengan nama yang Anda berikan
                 'Nama : Muhammad Ulil Albab',
                 'NIM  : 2211102441104',
               ),
               const SizedBox(height: 10.0),
-              const Center(
-                child: Text(
-                  'Kelompok 14',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
-                ),
-              ),
+              Center(
+                  child: Text('Kelompok 14',
+                      style: GoogleFonts.poppins(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: grey))),
             ],
           ),
         ),
@@ -77,8 +80,12 @@ class About extends StatelessWidget {
   Widget buildMahasiswaInfo(
       String title, String imagePath, String name, String description) {
     return Container(
-      padding: const EdgeInsets.all(8.0),
-      color: stroke,
+      padding: const EdgeInsets.all(14.0),
+      decoration: BoxDecoration(
+        color: surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFD8CFC3)),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -86,7 +93,8 @@ class About extends StatelessWidget {
             title,
             style: const TextStyle(
               fontSize: 16.0,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
+              color: text,
             ),
           ),
           const SizedBox(height: 5.0),
@@ -107,12 +115,14 @@ class About extends StatelessWidget {
                   children: [
                     Text(
                       name,
-                      style: const TextStyle(fontSize: 14.0),
+                      style: const TextStyle(
+                          fontSize: 14.0, color: text, height: 1.4),
                     ),
                     const SizedBox(height: 5.0),
                     Text(
                       description,
-                      style: const TextStyle(fontSize: 14.0),
+                      style: const TextStyle(
+                          fontSize: 14.0, color: grey, height: 1.4),
                     ),
                   ],
                 ),

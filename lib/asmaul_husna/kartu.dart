@@ -1,11 +1,12 @@
 import 'package:dakwah_y_up/asmaul_husna/respon_api.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:dakwah_y_up/bahan.dart';
 
 class CardView extends StatelessWidget {
   final int index;
-  final List<EntityModel> data; 
-  
+  final List<EntityModel> data;
+
   const CardView({super.key, required this.index, required this.data});
 
   @override
@@ -15,17 +16,8 @@ class CardView extends StatelessWidget {
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        gradient: const LinearGradient(
-          colors: [Color(0xFF1C6758), Color(0xFF1C6758)],
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter
-        ),
-        boxShadow: const [
-          BoxShadow(
-            offset: Offset(0, 3),
-            blurRadius: 6.0
-          )
-        ]
+        color: surface,
+        border: Border.all(color: const Color(0xFFDDE4DC)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -38,16 +30,17 @@ class CardView extends StatelessWidget {
               style: GoogleFonts.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: Colors.white, 
+                color: grey,
               ),
             ),
           ),
           Text(
             data[index].arab!,
             style: GoogleFonts.poppins(
-              fontSize: 23,
+              fontSize: 25,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: stroke,
+              height: 1.5,
             ),
             textAlign: TextAlign.center,
           ),
@@ -56,7 +49,7 @@ class CardView extends StatelessWidget {
             style: GoogleFonts.poppins(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: text,
             ),
             textAlign: TextAlign.center,
           ),
@@ -68,9 +61,9 @@ class CardView extends StatelessWidget {
               softWrap: true,
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.poppins(
-                fontSize: 10,
+                fontSize: 11,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: grey,
               ),
               textAlign: TextAlign.center,
             ),

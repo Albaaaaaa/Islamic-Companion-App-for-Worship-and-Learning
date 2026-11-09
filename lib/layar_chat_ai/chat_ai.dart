@@ -34,27 +34,29 @@ class _ChatBotState extends State<ChatAi> {
     allMassages.insert(0, m);
     setState(() {});
 
-    var data = {"contents": [{"parts": [{"text": m.text}]}]};
+    var data = {
+      "contents": [
+        {
+          "parts": [
+            {"text": m.text}
+          ]
+        }
+      ]
+    };
 
     try {
-      print("DEBUG: Sending request to Gemini API");
-      print("DEBUG: URL: $ourUrl");
-      
-      final response = await http.post(
-        Uri.parse(ourUrl),
-        headers: header,
-        body: jsonEncode(data),
-      );
-
-      print("DEBUG: Response status code: ${response.statusCode}");
-      print("DEBUG: Response body: ${response.body}");
+      final response = await http
+          .post(
+            Uri.parse(ourUrl),
+            headers: header,
+            body: jsonEncode(data),
+          )
+          .timeout(const Duration(seconds: 25));
 
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
-        final responseText = result["candidates"][0]["content"]["parts"][0]["text"];
-        print("DEBUG: API Response received successfully");
-        print(responseText);
-        
+        final responseText =
+            result["candidates"][0]["content"]["parts"][0]["text"];
         ChatMessage m1 = ChatMessage(
           user: bot,
           createdAt: DateTime.now(),
@@ -62,28 +64,23 @@ class _ChatBotState extends State<ChatAi> {
         );
         allMassages.insert(0, m1);
       } else {
-        print("ERROR: API returned status code ${response.statusCode}");
-        print("ERROR: Response body: ${response.body}");
-        
         ChatMessage errorMsg = ChatMessage(
           user: bot,
           createdAt: DateTime.now(),
-          text: "Error: API returned status ${response.statusCode}. ${response.body}",
+          text:
+              'Asisten belum bisa menjawab saat ini. Coba lagi sebentar lagi.',
         );
         allMassages.insert(0, errorMsg);
       }
-    } catch (e, stackTrace) {
-      print("ERROR: Exception occurred: $e");
-      print("ERROR: Stack trace: $stackTrace");
-      
+    } catch (_) {
       ChatMessage errorMsg = ChatMessage(
         user: bot,
         createdAt: DateTime.now(),
-        text: "Error: $e",
+        text: 'Koneksi terputus. Periksa internetmu lalu coba lagi.',
       );
       allMassages.insert(0, errorMsg);
     }
-    
+
     typing.remove(bot);
     setState(() {});
   }
@@ -91,24 +88,31 @@ class _ChatBotState extends State<ChatAi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: latarbelakang, // Ubah latar belakang menjadi hitam
+      backgroundColor: latarbelakang,
       appBar: AppBar(
-        title: Text("Dakwah'y up Chat AI", style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),), // Ubah warna teks menjadi hitam
+        title: Text(
+          "Dakwah'y up Chat AI",
+          style: GoogleFonts.poppins(
+              color: text, fontWeight: FontWeight.w600, fontSize: 18),
+        ),
         // Tambahkan tombol kembali di sini
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white,),
-          color: latarbelakang, // Ubah warna tombol menjadi hitam
+          tooltip: 'Kembali',
+          icon: const Icon(
+            Icons.arrow_back,
+            color: text,
+          ),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-        backgroundColor: latarbelakang, // Ubah warna latar belakang AppBar sesuai kebutuhan
+        backgroundColor: surface,
       ),
       body: DashChat(
         messageOptions: const MessageOptions(
           showTime: true,
-          textColor: Colors.white,
-          containerColor: Color.fromARGB(255, 63, 60, 60),
+          textColor: text,
+          containerColor: surface,
         ),
         typingUsers: typing,
         currentUser: muself,

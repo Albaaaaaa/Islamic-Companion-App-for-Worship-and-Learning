@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:adhan/adhan.dart';
 import '../services/prayer_service.dart';
+import '../bahan.dart';
 
 class PrayerScheduleScreen extends StatefulWidget {
   const PrayerScheduleScreen({super.key});
@@ -19,10 +20,10 @@ class _PrayerScheduleScreenState extends State<PrayerScheduleScreen> {
   Duration _tick = Duration.zero;
   DateTime _lastLoadedDate = DateTime.now();
 
-  static const Color bgColor = Color(0xFF141225);
-  static const Color cardColor = Color(0xFF1E1B36);
-  static const Color accentGreen = Color(0xFF3ECF8E);
-  static const Color mutedText = Color(0xFF8B8A9E);
+  static const Color bgColor = latarbelakang;
+  static const Color cardColor = surface;
+  static const Color accentGreen = stroke;
+  static const Color mutedText = grey;
 
   @override
   void initState() {
@@ -104,32 +105,53 @@ class _PrayerScheduleScreenState extends State<PrayerScheduleScreen> {
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
-        backgroundColor: bgColor,
+        backgroundColor: surface,
         elevation: 0,
-        title: const Text('Jadwal Sholat', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
-        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text('Jadwal sholat',
+            style: TextStyle(color: text, fontWeight: FontWeight.w700)),
+        iconTheme: const IconThemeData(color: text),
       ),
       body: FutureBuilder<PrayerData>(
         future: _futureData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(color: accentGreen));
+            return const Center(
+                child: CircularProgressIndicator(color: accentGreen));
           }
 
           if (snapshot.hasError) {
             return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Error: ${snapshot.error}', style: const TextStyle(color: mutedText)),
-                  const SizedBox(height: 12),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(backgroundColor: accentGreen),
-                    onPressed: _refreshLocation,
-                    icon: const Icon(Icons.refresh),
-                    label: const Text('Coba Lagi'),
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.location_off_outlined,
+                        color: stroke, size: 42),
+                    const SizedBox(height: 16),
+                    const Text('Jadwal belum bisa dimuat',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: text,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18)),
+                    const SizedBox(height: 8),
+                    Text(_friendlyError(snapshot.error),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: mutedText, height: 1.5)),
+                    const SizedBox(height: 12),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: accentGreen,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(160, 48),
+                      ),
+                      onPressed: _refreshLocation,
+                      icon: const Icon(Icons.my_location_rounded),
+                      label: const Text('Aktifkan lokasi'),
+                    ),
+                  ],
+                ),
               ),
             );
           }
@@ -150,12 +172,18 @@ class _PrayerScheduleScreenState extends State<PrayerScheduleScreen> {
                 const SizedBox(height: 20),
                 _buildLocationHeader(data.cityName),
                 const SizedBox(height: 16),
-                _buildPrayerTile('Subuh', _formatTime(prayerTimes.fajr), currentPrayer == 'Subuh'),
-                _buildPrayerTile('Terbit', _formatTime(prayerTimes.sunrise), false),
-                _buildPrayerTile('Dzuhur', _formatTime(prayerTimes.dhuhr), currentPrayer == 'Dzuhur'),
-                _buildPrayerTile('Ashar', _formatTime(prayerTimes.asr), currentPrayer == 'Ashar'),
-                _buildPrayerTile('Maghrib', _formatTime(prayerTimes.maghrib), currentPrayer == 'Maghrib'),
-                _buildPrayerTile('Isya', _formatTime(prayerTimes.isha), currentPrayer == 'Isya'),
+                _buildPrayerTile('Subuh', _formatTime(prayerTimes.fajr),
+                    currentPrayer == 'Subuh'),
+                _buildPrayerTile(
+                    'Terbit', _formatTime(prayerTimes.sunrise), false),
+                _buildPrayerTile('Dzuhur', _formatTime(prayerTimes.dhuhr),
+                    currentPrayer == 'Dzuhur'),
+                _buildPrayerTile('Ashar', _formatTime(prayerTimes.asr),
+                    currentPrayer == 'Ashar'),
+                _buildPrayerTile('Maghrib', _formatTime(prayerTimes.maghrib),
+                    currentPrayer == 'Maghrib'),
+                _buildPrayerTile('Isya', _formatTime(prayerTimes.isha),
+                    currentPrayer == 'Isya'),
               ],
             ),
           );
@@ -164,50 +192,102 @@ class _PrayerScheduleScreenState extends State<PrayerScheduleScreen> {
     );
   }
 
+  String _friendlyError(Object? error) {
+    final message = error?.toString() ?? '';
+    if (message.contains('ditolak permanen')) {
+      return 'Izin lokasi diblokir. Buka pengaturan aplikasi, izinkan lokasi, lalu coba lagi.';
+    }
+    if (message.contains('ditolak')) {
+      return 'Izinkan lokasi agar jadwal sholat sesuai dengan tempatmu.';
+    }
+    if (message.contains('tidak aktif')) {
+      return 'Nyalakan layanan lokasi di perangkat, lalu tekan tombol di bawah.';
+    }
+    return 'Kami belum mendapatkan lokasi perangkat. Periksa izin lokasi dan coba lagi.';
+  }
+
   Widget _buildNextPrayerHero(NextPrayerInfo next, String cityName) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(colors: [Color(0xFF2E8B6F), Color(0xFF163D30)]),
+        gradient: greenGradient,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Stack(
         children: [
-          Positioned(right: -10, top: -10, child: Icon(Icons.mosque, size: 90, color: Colors.white.withOpacity(0.08))),
+          Positioned(
+              right: -10,
+              top: -10,
+              child: Icon(Icons.mosque,
+                  size: 90, color: Colors.white.withOpacity(0.08))),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  const Icon(Icons.location_on, size: 14, color: Colors.white70),
+                  const Icon(Icons.location_on,
+                      size: 14, color: Colors.white70),
                   const SizedBox(width: 4),
-                  Expanded(child: Text(cityName, style: const TextStyle(color: Colors.white70, fontSize: 12), overflow: TextOverflow.ellipsis)),
-                  _isRefreshing ? const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white70))
-                      : GestureDetector(onTap: _refreshLocation, child: const Icon(Icons.refresh, size: 16, color: Colors.white70)),
+                  Expanded(
+                      child: Text(cityName,
+                          style: const TextStyle(
+                              color: Colors.white70, fontSize: 12),
+                          overflow: TextOverflow.ellipsis)),
+                  _isRefreshing
+                      ? const SizedBox(
+                          width: 14,
+                          height: 14,
+                          child: CircularProgressIndicator(
+                              strokeWidth: 2, color: Colors.white70))
+                      : IconButton(
+                          tooltip: 'Perbarui lokasi',
+                          onPressed: _refreshLocation,
+                          padding: EdgeInsets.zero,
+                          constraints:
+                              const BoxConstraints(minWidth: 44, minHeight: 44),
+                          icon: const Icon(Icons.refresh,
+                              size: 18, color: Colors.white70)),
                 ],
               ),
               const SizedBox(height: 14),
-              const Text('Sholat Berikutnya', style: TextStyle(color: Colors.white70, fontSize: 13)),
+              const Text('Sholat Berikutnya',
+                  style: TextStyle(color: Colors.white70, fontSize: 13)),
               const SizedBox(height: 4),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
-                  Text(next.name, style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.bold)),
+                  Text(next.name,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold)),
                   const SizedBox(width: 10),
-                  Text(_formatTime(next.time), style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500)),
+                  Text(_formatTime(next.time),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500)),
                 ],
               ),
               const SizedBox(height: 10),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0.15), borderRadius: BorderRadius.circular(20)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(20)),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.access_time, size: 14, color: Colors.white),
+                    const Icon(Icons.access_time,
+                        size: 14, color: Colors.white),
                     const SizedBox(width: 6),
-                    Text(_formatCountdown(next.remaining), style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
+                    Text(_formatCountdown(next.remaining),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500)),
                   ],
                 ),
               ),
@@ -222,16 +302,27 @@ class _PrayerScheduleScreenState extends State<PrayerScheduleScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(colors: [Color(0xFF1F6F5C), Color(0xFF14382E)]),
+        color: surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [
-          const Icon(Icons.location_on, color: Colors.white),
+          const Icon(Icons.location_on, color: stroke),
           const SizedBox(width: 10),
-          Expanded(child: Text(cityName, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15, color: Colors.white), overflow: TextOverflow.ellipsis)),
-          _isRefreshing ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-              : IconButton(icon: const Icon(Icons.refresh, color: Colors.white), onPressed: _refreshLocation),
+          Expanded(
+              child: Text(cityName,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 15, color: text),
+                  overflow: TextOverflow.ellipsis)),
+          _isRefreshing
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child:
+                      CircularProgressIndicator(strokeWidth: 2, color: stroke))
+              : IconButton(
+                  icon: const Icon(Icons.refresh, color: stroke),
+                  onPressed: _refreshLocation),
         ],
       ),
     );
@@ -242,21 +333,36 @@ class _PrayerScheduleScreenState extends State<PrayerScheduleScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       decoration: BoxDecoration(
-        color: isActive ? accentGreen.withOpacity(0.15) : cardColor,
+        color: isActive ? const Color(0xFFE5EEE6) : cardColor,
         borderRadius: BorderRadius.circular(14),
-        border: isActive ? Border.all(color: accentGreen, width: 1.2) : null,
+        border: Border.all(
+            color: isActive ? stroke : const Color(0xFFDDE4DC),
+            width: isActive ? 1.2 : 1),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
-              Container(width: 8, height: 8, decoration: BoxDecoration(color: isActive ? accentGreen : mutedText, shape: BoxShape.circle)),
+              Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                      color: isActive ? accentGreen : mutedText,
+                      shape: BoxShape.circle)),
               const SizedBox(width: 12),
-              Text(name, style: TextStyle(color: isActive ? accentGreen : Colors.white, fontWeight: FontWeight.w600, fontSize: 15)),
+              Text(name,
+                  style: TextStyle(
+                      color: isActive ? accentGreen : text,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15)),
             ],
           ),
-          Text(time, style: TextStyle(color: isActive ? accentGreen : Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+          Text(time,
+              style: TextStyle(
+                  color: isActive ? accentGreen : text,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600)),
         ],
       ),
     );

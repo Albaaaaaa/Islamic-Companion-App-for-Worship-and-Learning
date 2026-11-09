@@ -61,7 +61,9 @@ class DetailScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
-                  color: grey, borderRadius: BorderRadius.circular(10)),
+                  color: surface,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: const Color(0xFFD8CFC3))),
               child: Row(
                 children: [
                   Container(
@@ -87,9 +89,7 @@ class DetailScreen extends StatelessWidget {
             Text(
               ayat.ar,
               style: GoogleFonts.amiri(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
+                  color: text, fontWeight: FontWeight.bold, fontSize: 18),
               textAlign: TextAlign.right,
             ),
             const SizedBox(
@@ -110,19 +110,7 @@ class DetailScreen extends StatelessWidget {
             height: 257,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    stops: [
-                      0,
-                      .6,
-                      1
-                    ],
-                    colors: [
-                      Color(0xFF4C726C),
-                      Color(0xFF1C6758),
-                      Color(0xFF1C6758)
-                    ])),
+                gradient: greenGradient),
           ),
           Positioned(
               bottom: 0,

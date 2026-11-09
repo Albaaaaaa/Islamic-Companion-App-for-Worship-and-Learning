@@ -3,7 +3,6 @@ import 'package:dakwah_y_up/asmaul_husna/respon_api.dart';
 import 'package:dakwah_y_up/asmaul_husna/kartu.dart';
 import 'package:dakwah_y_up/bahan.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AsmaulHusna extends StatefulWidget {
@@ -26,17 +25,18 @@ class _AsmaulHusna extends State<AsmaulHusna> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF040C23),
+      backgroundColor: latarbelakang,
       appBar: AppBar(
         backgroundColor: latarbelakang,
+        foregroundColor: text,
         title: Text(
           "Asmaul Husna",
-          style: GoogleFonts.poppins(color: Colors.white ,fontWeight: FontWeight.w600),
+          style: GoogleFonts.poppins(color: text, fontWeight: FontWeight.w600),
         ),
       ),
       body: Container(
         margin: const EdgeInsets.all(12),
-        color: const Color(0xFF040C23),
+        color: latarbelakang,
         child: Column(
           children: [
             TextField(
@@ -46,12 +46,19 @@ class _AsmaulHusna extends State<AsmaulHusna> {
                   "Search",
                   style: GoogleFonts.inter(),
                 ),
+                filled: true,
+                fillColor: surface,
+                prefixIconColor: stroke,
+                labelStyle: GoogleFonts.poppins(color: grey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: Color(0xFFDDE4DC)),
                 ),
               ),
             ),
-            const SizedBox(height: 12,),
+            const SizedBox(
+              height: 12,
+            ),
             Expanded(
               child: FutureBuilder(
                 future: listData,
@@ -60,23 +67,26 @@ class _AsmaulHusna extends State<AsmaulHusna> {
                     return Text("${snapshot.error}");
                   } else if (snapshot.hasData) {
                     List<EntityModel> data = snapshot.data!;
-                    return GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisExtent: 230,
-                      ),
-                      shrinkWrap: true,
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        return CardView(
-                          index: index,
-                          data: data,
-                        );
-                      },
-                    );
+                    return LayoutBuilder(
+                        builder: (context, constraints) => GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount:
+                                    constraints.maxWidth > 540 ? 3 : 2,
+                                mainAxisExtent: 218,
+                              ),
+                              shrinkWrap: true,
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                return CardView(
+                                  index: index,
+                                  data: data,
+                                );
+                              },
+                            ));
                   } else {
                     return const Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(color: stroke),
                     );
                   }
                 }),
